@@ -19,8 +19,6 @@ services:
       - MONGO_HOST=db
       - MONGO_PORT=27017
       - MONGO_DBNAME=unifi
-      - MONGO_USER=unifi
-      - MONGO_PASS=${MONGO_PASS}
     volumes:
       - unifi-config:/config
     networks:
