@@ -5,6 +5,10 @@ services:
       - unifi-db:/data/db
     networks:
       - unifi
+    deploy:
+      placement:
+        constraints:
+          - node.labels.unifi == true
 
   controller:
     image: lscr.io/linuxserver/unifi-network-application:latest
@@ -36,10 +40,9 @@ services:
         protocol: udp
         mode: ingress
     deploy:
-      replicas: 1
       placement:
         constraints:
-          - node.hostname == docker01
+          - node.labels.unifi == true
       labels:
         - traefik.enable=true
         - traefik.swarm.network=proxy
@@ -56,3 +59,4 @@ networks:
   proxy:
     external: true
   unifi:
+    driver: overlay
