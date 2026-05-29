@@ -1,0 +1,34 @@
+services:
+  unifi-protect:
+    image: ${UNIFI_PROTECT_IMAGE:-unifi-protect-unvr:edge}
+    container_name: unifi-protect
+    hostname: UNVR
+    tty: true
+    stop_grace_period: 2m
+    cgroup: host
+    network_mode: host
+    privileged: true
+    restart: unless-stopped
+    extra_hosts:
+      - "UNVR:127.0.1.1"
+    cap_add:
+      - dac_read_search
+      - sys_admin
+    security_opt:
+      - apparmor=unconfined
+      - seccomp=unconfined
+    environment:
+      - container=docker
+      - STORAGE_DISK=${UNIFI_PROTECT_STORAGE_DISK:-/dev/sda}
+      - DEBUG=${UNIFI_PROTECT_DEBUG:-false}
+    tmpfs:
+      - /run
+      - /run/lock
+      - /tmp
+      - /var/run
+      - /var/run/lock
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup
+      - ./storage/srv:/srv
+      - ./storage/data:/data
+      - ./storage/persistent:/persistent
