@@ -45,6 +45,8 @@ services:
 
         - traefik.http.services.unifi.loadbalancer.server.port=8443
 
+        - traefik.http.services.unifi.loadbalancer.server.scheme=https
+
 volumes:
   unifi-config:
 
