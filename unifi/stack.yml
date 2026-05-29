@@ -1,55 +1,58 @@
 services:
+  db:
+    image: mongo:7
+    volumes:
+      - unifi-db:/data/db
+    networks:
+      - unifi
+
   controller:
     image: lscr.io/linuxserver/unifi-network-application:latest
-
     environment:
       - PUID=1000
       - PGID=1000
       - TZ=America/New_York
-
+      - MONGO_HOST=db
+      - MONGO_PORT=27017
+      - MONGO_DBNAME=unifi
+      - MONGO_USER=unifi
+      - MONGO_PASS=${MONGO_PASS}
     volumes:
       - unifi-config:/config
-
     networks:
       - proxy
-
+      - unifi
     ports:
       - target: 8080
         published: 8080
         protocol: tcp
         mode: ingress
-
       - target: 3478
         published: 3478
         protocol: udp
         mode: ingress
-
       - target: 10001
         published: 10001
         protocol: udp
         mode: ingress
-
     deploy:
       replicas: 1
-
       placement:
         constraints:
           - node.hostname == docker01
-
       labels:
         - traefik.enable=true
-
+        - traefik.swarm.network=proxy
         - traefik.http.routers.unifi.rule=Host(`unifi.home.arpa`)
-
         - traefik.http.routers.unifi.entrypoints=web
-
         - traefik.http.services.unifi.loadbalancer.server.port=8443
-
         - traefik.http.services.unifi.loadbalancer.server.scheme=https
 
 volumes:
   unifi-config:
+  unifi-db:
 
 networks:
   proxy:
     external: true
+  unifi:
