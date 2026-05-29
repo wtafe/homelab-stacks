@@ -1,20 +1,20 @@
 services:
-db:
-  image: mongo:4.4
-  environment:
-    - MONGO_INITDB_ROOT_USERNAME=root
-    - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASS}
-    - MONGO_INITDB_DATABASE=unifi
-    - MONGO_INITDB_USERNAME=unifi
-    - MONGO_INITDB_PASSWORD=${MONGO_PASS}
-  volumes:
-    - unifi-db:/data/db
-  networks:
-    - unifi
-  deploy:
-    placement:
-      constraints:
-        - node.labels.unifi == true
+  db:
+    image: mongo:4.4
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASS}
+      - MONGO_INITDB_DATABASE=unifi
+      - MONGO_INITDB_USERNAME=unifi
+      - MONGO_INITDB_PASSWORD=${MONGO_PASS}
+    volumes:
+      - unifi-db:/data/db
+    networks:
+      - unifi
+    deploy:
+      placement:
+        constraints:
+          - node.labels.unifi == true
 
   controller:
     image: lscr.io/linuxserver/unifi-network-application:latest
