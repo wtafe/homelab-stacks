@@ -42,15 +42,15 @@ services:
       - target: 8080
         published: 8080
         protocol: tcp
-        mode: ingress
+        mode: host
       - target: 3478
         published: 3478
         protocol: udp
-        mode: ingress
+        mode: host
       - target: 10001
         published: 10001
         protocol: udp
-        mode: ingress
+        mode: host
     deploy:
       placement:
         constraints:
