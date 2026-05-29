@@ -1,14 +1,13 @@
-services:
-  db:
-    image: mongo:7
-    volumes:
-      - unifi-db:/data/db
-    networks:
-      - unifi
-    deploy:
-      placement:
-        constraints:
-          - node.labels.unifi == true
+db:
+  image: mongo:4.4
+  volumes:
+    - unifi-db:/data/db
+  networks:
+    - unifi
+  deploy:
+    placement:
+      constraints:
+        - node.labels.unifi == true
 
   controller:
     image: lscr.io/linuxserver/unifi-network-application:latest
