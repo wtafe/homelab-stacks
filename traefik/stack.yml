@@ -10,6 +10,7 @@ services:
       - --api.dashboard=true
       - --accesslog=true
       - --accesslog.format=json
+      - --serversTransport.insecureSkipVerify=true
 
     ports:
       - target: 80
