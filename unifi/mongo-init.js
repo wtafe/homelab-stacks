@@ -5,6 +5,7 @@ db.createUser({
   pwd: _getEnv("MONGO_PASS"),
   roles: [
     { role: "dbOwner", db: "unifi" },
-    { role: "dbOwner", db: "unifi_stat" }
+    { role: "dbOwner", db: "unifi_stat" },
+    { role: "clusterMonitor", db: "admin" }
   ]
 });
