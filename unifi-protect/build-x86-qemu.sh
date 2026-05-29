@@ -3,7 +3,7 @@ set -euo pipefail
 
 UPSTREAM_REPO="${UPSTREAM_REPO:-https://github.com/dciancu/unifi-protect-unvr-docker-arm64.git}"
 UPSTREAM_DIR="${UPSTREAM_DIR:-./unifi-protect-unvr-docker-arm64}"
-IMAGE_NAME="${UNIFI_PROTECT_IMAGE:-unifi-protect-unvr:edge}"
+IMAGE_REPOSITORY="${UNIFI_PROTECT_IMAGE_REPOSITORY:-unifi-protect-unvr}"
 
 if [ ! -d "$UPSTREAM_DIR/.git" ]; then
   git clone "$UPSTREAM_REPO" "$UPSTREAM_DIR"
@@ -34,7 +34,7 @@ TimeoutStopSec=300
 EOF
 
 DOCKER_DEFAULT_PLATFORM=linux/arm64 \
-DOCKER_IMAGE="$IMAGE_NAME" \
+DOCKER_IMAGE="$IMAGE_REPOSITORY" \
 BUILD_EDGE=1 \
 BUILD_TAG_VERSION=1 \
 bash build.sh

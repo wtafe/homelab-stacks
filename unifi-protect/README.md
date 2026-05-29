@@ -27,7 +27,7 @@ Build and deploy on an ARM64 host:
 ```bash
 git clone https://github.com/dciancu/unifi-protect-unvr-docker-arm64.git
 cd unifi-protect-unvr-docker-arm64
-BUILD_EDGE=1 BUILD_TAG_VERSION=1 DOCKER_IMAGE=unifi-protect-unvr:edge bash build.sh
+BUILD_EDGE=1 BUILD_TAG_VERSION=1 DOCKER_IMAGE=unifi-protect-unvr bash build.sh
 cd -
 UNIFI_PROTECT_IMAGE=unifi-protect-unvr:edge docker compose -f unifi-protect/compose.yml up -d
 ```
