@@ -33,14 +33,6 @@ services:
       placement:
         constraints:
           - node.role == manager
-      labels:
-      - traefik.enable=true
-      - traefik.swarm.network=proxy
-      - traefik.http.routers.unifi.rule=Host(`unifi.home.arpa`)
-      - traefik.http.routers.unifi.entrypoints=websecure
-      - traefik.http.routers.unifi.tls=true
-      - traefik.http.services.unifi.loadbalancer.server.port=8443
-      - traefik.http.services.unifi.loadbalancer.server.scheme=https
 
 networks:
   proxy:
