@@ -1,3 +1,7 @@
+configs:
+  mongo-init:
+    file: ./mongo-init.js
+
 services:
   db:
     image: mongo:4.4
@@ -5,9 +9,11 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASS}
       - MONGO_PASS=${MONGO_PASS}
+    configs:
+      - source: mongo-init
+        target: /docker-entrypoint-initdb.d/mongo-init.js
     volumes:
       - unifi-db:/data/db
-      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     networks:
       - unifi
     deploy:
