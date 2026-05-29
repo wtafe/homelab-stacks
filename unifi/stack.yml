@@ -1,0 +1,53 @@
+services:
+  unifi:
+    image: lscr.io/linuxserver/unifi-network-application:latest
+
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+
+    volumes:
+      - unifi-config:/config
+
+    networks:
+      - proxy
+
+    ports:
+      - target: 8080
+        published: 8080
+        protocol: tcp
+        mode: ingress
+
+      - target: 3478
+        published: 3478
+        protocol: udp
+        mode: ingress
+
+      - target: 10001
+        published: 10001
+        protocol: udp
+        mode: ingress
+
+    deploy:
+      replicas: 1
+
+      placement:
+        constraints:
+          - node.hostname == docker01
+
+      labels:
+        - traefik.enable=true
+
+        - traefik.http.routers.unifi.rule=Host(`unifi.home.arpa`)
+
+        - traefik.http.routers.unifi.entrypoints=web
+
+        - traefik.http.services.unifi.loadbalancer.server.port=8443
+
+volumes:
+  unifi-config:
+
+networks:
+  proxy:
+    external: true
