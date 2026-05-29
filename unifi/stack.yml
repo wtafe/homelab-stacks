@@ -1,5 +1,5 @@
 services:
-  unifi:
+  controller:
     image: lscr.io/linuxserver/unifi-network-application:latest
 
     environment:
