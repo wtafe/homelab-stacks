@@ -1,0 +1,12 @@
+services:
+  unifi-gateway:
+    image: ghcr.io/amd989/unifi-gateway:latest
+    network_mode: host
+    restart: unless-stopped
+    environment:
+      - UNIFI_GW_CONFIG=conf/unifi-gateway.conf
+      - UNIFI_GW_LOG_LEVEL=${UNIFI_GW_LOG_LEVEL:-INFO}
+      - UNIFI_ADOPT_URL=${UNIFI_ADOPT_URL:-http://unifi.home.arpa:8080/inform}
+      - UNIFI_ADOPT_KEY=${UNIFI_ADOPT_KEY:-}
+    volumes:
+      - ./conf:/app/conf

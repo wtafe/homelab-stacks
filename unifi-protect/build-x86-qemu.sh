@@ -35,6 +35,39 @@ for nginx_conf in files/etc/nginx/nginx.conf files/etc/nginx/nginx.conf.disabled
   fi
 done
 
+mkdir -p files/usr/local/sbin
+cat > files/usr/local/sbin/fix-nginx-hash <<'EOF'
+#!/bin/sh
+set -eu
+
+rm -rf /var/run/uos-*.sock
+
+sed -i '/map_hash_/d;/server_names_hash_/d;/types_hash_/d' /etc/nginx/nginx.conf
+
+awk '
+  { print }
+  $0 ~ /^[[:space:]]*http[[:space:]]*\{/ && !done {
+    print "    map_hash_max_size 32768;"
+    print "    map_hash_bucket_size 1024;"
+    print "    server_names_hash_max_size 32768;"
+    print "    server_names_hash_bucket_size 1024;"
+    print "    types_hash_max_size 32768;"
+    print "    types_hash_bucket_size 1024;"
+    done=1
+  }
+' /etc/nginx/nginx.conf > /etc/nginx/nginx.conf.tmp
+
+mv /etc/nginx/nginx.conf.tmp /etc/nginx/nginx.conf
+EOF
+chmod +x files/usr/local/sbin/fix-nginx-hash
+
+mkdir -p files/etc/systemd/system/nginx.service.d
+cat > files/etc/systemd/system/nginx.service.d/hash.conf <<'EOF'
+[Service]
+ExecStartPre=
+ExecStartPre=/usr/local/sbin/fix-nginx-hash
+EOF
+
 mkdir -p files/etc/systemd/system/unifi-core.service.d
 cat > files/etc/systemd/system/unifi-core.service.d/override.conf <<'EOF'
 [Service]

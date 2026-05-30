@@ -1,0 +1,114 @@
+services:
+  unifi-os-server:
+    image: ghcr.io/lemker/unifi-os-server:latest
+    cgroup: host
+    cap_add:
+      - NET_RAW
+      - NET_ADMIN
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    tmpfs:
+      - /run:exec
+      - /run/lock
+      - /tmp:exec
+      - /var/lib/journal
+      - /var/opt/unifi/tmp:size=64m
+    environment:
+      - UOS_SYSTEM_IP=${UOS_SYSTEM_IP:-unifi-os.home.arpa}
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+      - unifi-os-persistent:/persistent
+      - unifi-os-var-log:/var/log
+      - unifi-os-data:/data
+      - unifi-os-srv:/srv
+      - unifi-os-var-lib-unifi:/var/lib/unifi
+      - unifi-os-var-lib-mongodb:/var/lib/mongodb
+      - unifi-os-etc-rabbitmq-ssl:/etc/rabbitmq/ssl
+    networks:
+      - proxy
+    ports:
+      - target: 5005
+        published: 5005
+        protocol: tcp
+        mode: ingress
+      - target: 9543
+        published: 9543
+        protocol: tcp
+        mode: ingress
+      - target: 6789
+        published: 6789
+        protocol: tcp
+        mode: ingress
+      - target: 8080
+        published: 8080
+        protocol: tcp
+        mode: ingress
+      - target: 8443
+        published: 8443
+        protocol: tcp
+        mode: ingress
+      - target: 8444
+        published: 8444
+        protocol: tcp
+        mode: ingress
+      - target: 3478
+        published: 3478
+        protocol: udp
+        mode: ingress
+      - target: 5514
+        published: 5514
+        protocol: udp
+        mode: ingress
+      - target: 10003
+        published: 10003
+        protocol: udp
+        mode: ingress
+      - target: 11084
+        published: 11084
+        protocol: tcp
+        mode: ingress
+      - target: 5671
+        published: 5671
+        protocol: tcp
+        mode: ingress
+      - target: 8880
+        published: 8880
+        protocol: tcp
+        mode: ingress
+      - target: 8881
+        published: 8881
+        protocol: tcp
+        mode: ingress
+      - target: 8882
+        published: 8882
+        protocol: tcp
+        mode: ingress
+    deploy:
+      placement:
+        constraints:
+          - node.labels.unifi-os == true
+      labels:
+        - traefik.enable=true
+        - traefik.swarm.network=proxy
+        - traefik.http.routers.unifi-os-http.rule=Host(`unifi-os.home.arpa`)
+        - traefik.http.routers.unifi-os-http.entrypoints=web
+        - traefik.http.routers.unifi-os-http.service=unifi-os
+        - traefik.http.routers.unifi-os-https.rule=Host(`unifi-os.home.arpa`)
+        - traefik.http.routers.unifi-os-https.entrypoints=websecure
+        - traefik.http.routers.unifi-os-https.tls=true
+        - traefik.http.routers.unifi-os-https.service=unifi-os
+        - traefik.http.services.unifi-os.loadbalancer.server.port=443
+        - traefik.http.services.unifi-os.loadbalancer.server.scheme=https
+
+volumes:
+  unifi-os-data:
+  unifi-os-etc-rabbitmq-ssl:
+  unifi-os-persistent:
+  unifi-os-srv:
+  unifi-os-var-lib-mongodb:
+  unifi-os-var-lib-unifi:
+  unifi-os-var-log:
+
+networks:
+  proxy:
+    external: true
