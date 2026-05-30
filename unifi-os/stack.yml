@@ -39,7 +39,7 @@ services:
         protocol: tcp
         mode: ingress
       - target: 8080
-        published: 8080
+        published: ${UOS_INFORM_PORT:-18080}
         protocol: tcp
         mode: ingress
       - target: 8443
@@ -51,7 +51,7 @@ services:
         protocol: tcp
         mode: ingress
       - target: 3478
-        published: 3478
+        published: ${UOS_STUN_PORT:-3479}
         protocol: udp
         mode: ingress
       - target: 5514
