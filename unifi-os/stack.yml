@@ -26,6 +26,10 @@ services:
     networks:
       - proxy
     ports:
+      - target: 443
+        published: ${UOS_HTTPS_PORT:-11443}
+        protocol: tcp
+        mode: ingress
       - target: 5005
         published: 5005
         protocol: tcp
