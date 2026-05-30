@@ -27,6 +27,7 @@ services:
       - /var/lib/journal
       - /var/opt/unifi/tmp:size=64m
     environment:
+      - container=docker
       - UOS_SYSTEM_IP=${UOS_SYSTEM_IP:-unifi-os.home.arpa}
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw

@@ -1,8 +1,9 @@
 services:
-  unifi-os-server:
+  unifi-os-test:
     image: ghcr.io/lemker/unifi-os-server:latest
-    container_name: unifi-os-server
+    container_name: unifi-os-test
     hostname: unifi-os
+    cgroup: host
     privileged: true
     restart: unless-stopped
     stop_grace_period: 2m
