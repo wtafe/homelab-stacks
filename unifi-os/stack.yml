@@ -2,8 +2,22 @@ services:
   unifi-os-server:
     image: ghcr.io/lemker/unifi-os-server:latest
     cap_add:
+      - SYS_ADMIN
       - NET_RAW
       - NET_ADMIN
+      - NET_BIND_SERVICE
+      - DAC_OVERRIDE
+      - DAC_READ_SEARCH
+      - FOWNER
+      - CHOWN
+      - SETUID
+      - SETGID
+      - KILL
+      - SYS_CHROOT
+      - SYS_PTRACE
+      - SYS_RESOURCE
+      - AUDIT_WRITE
+      - MKNOD
     extra_hosts:
       - host.docker.internal:host-gateway
     tmpfs:
@@ -29,7 +43,7 @@ services:
       - target: 443
         published: 11443
         protocol: tcp
-        mode: ingress
+        mode: host
       - target: 5005
         published: 5005
         protocol: tcp
