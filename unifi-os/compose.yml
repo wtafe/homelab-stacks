@@ -1,0 +1,56 @@
+services:
+  unifi-os-server:
+    image: ghcr.io/lemker/unifi-os-server:latest
+    container_name: unifi-os-server
+    hostname: unifi-os
+    cgroup: host
+    privileged: true
+    restart: unless-stopped
+    stop_grace_period: 2m
+    security_opt:
+      - apparmor=unconfined
+      - seccomp=unconfined
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    tmpfs:
+      - /run:exec
+      - /run/lock
+      - /tmp:exec
+      - /var/lib/journal
+      - /var/opt/unifi/tmp:size=64m
+    environment:
+      - UOS_SYSTEM_IP=${UOS_SYSTEM_IP:-unifi-os.home.arpa}
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+      - unifi-os-persistent:/persistent
+      - unifi-os-var-log:/var/log
+      - unifi-os-data:/data
+      - unifi-os-srv:/srv
+      - unifi-os-var-lib-unifi:/var/lib/unifi
+      - unifi-os-var-lib-mongodb:/var/lib/mongodb
+      - unifi-os-etc-rabbitmq-ssl:/etc/rabbitmq/ssl
+    ports:
+      - 11443:443/tcp
+      - 5005:5005/tcp
+      - 9543:9543/tcp
+      - 6789:6789/tcp
+      - 18080:8080/tcp
+      - 8443:8443/tcp
+      - 8444:8444/tcp
+      - 3479:3478/udp
+      - 5514:5514/udp
+      - 10003:10003/udp
+      - 11084:11084/tcp
+      - 5671:5671/tcp
+      - 8880:8880/tcp
+      - 8881:8881/tcp
+      - 8882:8882/tcp
+
+volumes:
+  unifi-os-data:
+  unifi-os-etc-rabbitmq-ssl:
+  unifi-os-persistent:
+  unifi-os-srv:
+  unifi-os-var-lib-mongodb:
+  unifi-os-var-lib-unifi:
+  unifi-os-var-log:
