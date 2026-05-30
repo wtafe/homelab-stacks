@@ -101,6 +101,11 @@ services:
         protocol: tcp
         mode: ingress
     deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 3
+        window: 2m
       placement:
         constraints:
           - node.labels.unifi == true
