@@ -24,7 +24,7 @@ services:
     tmpfs:
       - /run
       - /run/lock
-      - /tmp
+      - /tmp:mode=1777
       - /var/run
       - /var/run/lock
     volumes:

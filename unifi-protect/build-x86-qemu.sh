@@ -29,15 +29,16 @@ if ! grep -q '/usr/sbin/policy-rc.d' protect.Dockerfile; then
   perl -0pi -e 's|(SHELL \["/usr/bin/env", "bash", "-c"\]\n)|$1RUN echo -e "#!/bin/sh\nexit 101" > /usr/sbin/policy-rc.d \\\n    && chmod +x /usr/sbin/policy-rc.d\n|' protect.Dockerfile
 fi
 
-if [ -f files/etc/nginx/nginx.conf.disabled ] \
-  && ! grep -q 'map_hash_bucket_size 128' files/etc/nginx/nginx.conf.disabled; then
-  perl -0pi -e 's/http \{/http {\n    map_hash_max_size 128;\n    map_hash_bucket_size 128;/' files/etc/nginx/nginx.conf.disabled
-fi
+for nginx_conf in files/etc/nginx/nginx.conf files/etc/nginx/nginx.conf.disabled; do
+  if [ -f "$nginx_conf" ] && ! grep -q 'map_hash_bucket_size 128' "$nginx_conf"; then
+    perl -0pi -e 's/http \{/http {\n    map_hash_max_size 128;\n    map_hash_bucket_size 128;/' "$nginx_conf"
+  fi
+done
 
 mkdir -p files/etc/systemd/system/unifi-core.service.d
 cat > files/etc/systemd/system/unifi-core.service.d/override.conf <<'EOF'
 [Service]
-MemoryMax=500M
+MemoryMax=2G
 TimeoutStartSec=300
 TimeoutStopSec=300
 EOF
