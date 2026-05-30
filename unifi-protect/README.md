@@ -64,6 +64,9 @@ UNIFI_PROTECT_IMAGE=unifi-protect-unvr:edge docker compose \
 In Portainer, create this as a standalone Compose stack, not a Swarm stack, and
 include both `compose.yml` and `compose-x86-qemu.yml`.
 
+For Proxmox, prefer running this inside a dedicated VM. See
+`proxmox-vm.md`.
+
 Access Protect at:
 
 ```text
