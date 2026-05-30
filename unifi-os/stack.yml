@@ -1,7 +1,6 @@
 services:
   unifi-os-server:
     image: ghcr.io/lemker/unifi-os-server:latest
-    cgroup: host
     cap_add:
       - NET_RAW
       - NET_ADMIN
