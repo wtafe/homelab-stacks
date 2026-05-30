@@ -85,7 +85,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.labels.unifi-os == true
+          - node.labels.unifi == true
       labels:
         - traefik.enable=true
         - traefik.swarm.network=proxy
