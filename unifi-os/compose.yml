@@ -3,7 +3,6 @@ services:
     image: ghcr.io/lemker/unifi-os-server:latest
     container_name: unifi-os-server
     hostname: unifi-os
-    cgroup: host
     privileged: true
     restart: unless-stopped
     stop_grace_period: 2m
